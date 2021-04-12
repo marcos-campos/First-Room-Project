@@ -50,22 +50,25 @@
         android:backgroundTint="@color/green2"
         android:src="@drawable/ic_add" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button_delete"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="Delete"/>
+<!--    <Button-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:id="@+id/button_delete"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        android:text="Delete"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:backgroundTint="@color/green3"/>-->
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler"
         android:layout_width="350dp"
-        android:layout_height="450dp"
-        android:id="@+id/lista_contatos"
-        app:layout_constraintTop_toBottomOf="@+id/telefone"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_height="400dp"
+        android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="15dp"/>
+        app:layout_constraintHorizontal_bias="0.508"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/telefone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

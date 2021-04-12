@@ -10,6 +10,9 @@ interface ContatoDao {
     @Query("SELECT * FROM contato")
     suspend fun getAll(): List<Contato>
 
+    @Query("SELECT * FROM contato")
+    suspend fun lastContact(): List<Contato>
+
     @Insert
     suspend fun insertAll(vararg contatos: Contato)
 

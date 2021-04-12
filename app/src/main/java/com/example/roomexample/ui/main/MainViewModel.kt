@@ -16,11 +16,19 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    fun ultimoContato() {
+        viewModelScope.launch {
+            val last = database.contatoDao().getAll().last()
+            contatosLiveData.postValue(listOf(last))
+        }
+    }
+
     fun addContato(contato: Contato) {
         viewModelScope.launch {
             database.contatoDao().insertAll(contato)
         }.invokeOnCompletion {
-            buscarContato()
+//            buscarContato()
+            ultimoContato()
         }
     }
 

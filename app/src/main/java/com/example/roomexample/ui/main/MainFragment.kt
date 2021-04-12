@@ -7,12 +7,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.room.Room
 import androidx.room.Room.databaseBuilder
 import com.example.roomexample.R
+import com.example.roomexample.adapter.AdapterContato
 
 class MainFragment : Fragment() {
 
@@ -26,9 +31,8 @@ class MainFragment : Fragment() {
         }
     }
 
-    val botaoAdd = view?.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.button_add)
-    val botaoDelete = view?.findViewById<Button>(R.id.button_delete)
-    val listaDeContatos by lazy { view?.findViewById<TextView>(R.id.lista_contatos) }
+    private var listaDeContatos = mutableListOf<Contato>()
+    val recycler by lazy { view?.findViewById<RecyclerView>(R.id.recycler) }
 
     companion object {
         fun newInstance() = MainFragment()
@@ -47,46 +51,45 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
+        recycler?.layoutManager = LinearLayoutManager(activity)
+
+        val adapter = activity?.let { AdapterContato(listaDeContatos, it) }
+        recycler?.adapter = adapter
+
         dataBaseOk?.let {
             viewModel.database = it
         }
 
         viewModel.buscarContato()
+        viewModel.contatosLiveData.observe(this, Observer {
+            listaDeContatos.addAll(it)
+
+            adapter?.notifyDataSetChanged()
+
+        })
 
         val etNome = view?.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.nome)
-
         val etTelefone= view?.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.telefone)
-
 
         val btnAdd = view?.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.button_add)
         btnAdd?.setOnClickListener {
             adicionarContato(etNome?.text.toString(), etTelefone?.text.toString().toInt())
         }
 
-        val btnDelete = view?.findViewById<Button>(R.id.button_delete)
-        btnDelete?.setOnClickListener {
-            deletarContato()
-        }
+//        val btnDelete = view?.findViewById<Button>(R.id.button_delete)
+//        btnDelete?.setOnClickListener {
+//            deletarContato()
+//        }
 
-        teste()
     }
 
     fun adicionarContato(nome: String, telefone: Int) {
 
             val contato = Contato(name = nome, telefone = telefone)
             viewModel.addContato(contato)
-
     }
 
-    fun deletarContato() {
-        viewModel.delete()
-    }
-
-    fun teste() {
-        viewModel.contatosLiveData.observe(this){
-            var text = ""
-            it.forEach { text += (it.toString() + "\n") }
-            listaDeContatos?.text = text
-        }
-    }
+//    fun deletarContato() {
+//        viewModel.delete()
+//    }
 }
