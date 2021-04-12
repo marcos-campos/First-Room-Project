@@ -47,29 +47,39 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        this.viewModel.database = this!!.dataBaseOk!!
+        dataBaseOk?.let {
+            viewModel.database = it
+        }
+
         viewModel.buscarContato()
 
-        teste()
-        adicionarContato()
-        deletarContato()
+        val etNome = view?.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.nome)
 
+        val etTelefone= view?.findViewById<com.google.android.material.textfield.TextInputEditText>(R.id.telefone)
+
+
+        val btnAdd = view?.findViewById<com.google.android.material.floatingactionbutton.FloatingActionButton>(R.id.button_add)
+        btnAdd?.setOnClickListener {
+            adicionarContato(etNome?.text.toString(), etTelefone?.text.toString().toInt())
+        }
+
+        val btnDelete = view?.findViewById<Button>(R.id.button_delete)
+        btnDelete?.setOnClickListener {
+            deletarContato()
+        }
+
+        teste()
     }
 
-    fun adicionarContato() {
-        botaoAdd?.setOnClickListener {
-            val contato = Contato(name = "Marcos", telefone = 10101010)
+    fun adicionarContato(nome: String, telefone: Int) {
 
+            val contato = Contato(name = nome, telefone = telefone)
             viewModel.addContato(contato)
-        }
+
     }
 
     fun deletarContato() {
-        botaoDelete?.setOnClickListener {
-
-            viewModel.delete()
-
-        }
+        viewModel.delete()
     }
 
     fun teste() {
@@ -78,6 +88,5 @@ class MainFragment : Fragment() {
             it.forEach { text += (it.toString() + "\n") }
             listaDeContatos?.text = text
         }
-
     }
 }

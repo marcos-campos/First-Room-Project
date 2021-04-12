@@ -19,13 +19,13 @@ class MainViewModel : ViewModel() {
     fun addContato(contato: Contato) {
         viewModelScope.launch {
             database.contatoDao().insertAll(contato)
+        }.invokeOnCompletion {
             buscarContato()
         }
     }
 
     fun delete() {
         val ultimoContato = contatosLiveData.value?.last() ?: return
-
         viewModelScope.launch {
             database.contatoDao().delete(ultimoContato)
             buscarContato()
