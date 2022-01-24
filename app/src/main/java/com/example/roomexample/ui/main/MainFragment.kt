@@ -22,8 +22,7 @@ import com.example.roomexample.adapter.AdapterContato
 class MainFragment : Fragment() {
 
     private val dataBaseOk by lazy {
-        activity?.let {
-            databaseBuilder(
+        activity?.let { databaseBuilder(
                     it,
                 RoomDatabase::class.java,
                 "dataBaseOk"
